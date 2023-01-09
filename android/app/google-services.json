@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "189238426488",
+    "project_id": "amera-edc55",
+    "storage_bucket": "amera-edc55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189238426488:android:fba92f48ed770ba3c3e68d",
+        "android_client_info": {
+          "package_name": "com.example.chat_blue_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189238426488-eo98bo46rp6f0m62a3ihv2n4pja1i151.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkVRwtdoZJBtqjFM4tmJW-sF_FbT9YQ5Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189238426488-eo98bo46rp6f0m62a3ihv2n4pja1i151.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "189238426488-c4epoblscdtn8e8085af2rcuv5d75uod.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.amera"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
