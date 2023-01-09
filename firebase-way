@@ -1,0 +1,24 @@
+
+
+طريقة الfirebase :
+
+بعد تسجيل مشروع جديد وتحميل ملف google.plst.info واضافته ل runner Xcode
+
+1- زيارة الرابط https://firebase.google.com/docs/flutter/setup?platform=web
+
+2- تنصيب ال firebase_core: - cloud_firestore - firebase_auth
+
+3- كتابة في التيرمنال الامر لتنصيب ال flutterfire_cli
+
+4- التأكد من تنصيب flutterfire configure
+
+5- اضافة الinsulized الموجود في ال main
+
+6- لا انسى ابدا اضافة الاسم
+
+7- الذهاب لملف الAppDelegate في الios واضافة :
+import Firebase
+    FirebaseApp.configure()
+
+8-اهم الخطوات فتح الترمنال الخاص بالماك وعمل cd للios/runner
+ثم كتابة الامر التالي للpod وهو pod install
