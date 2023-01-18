@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:chat_blue_firebase/home/home_screen.dart';
+import 'package:chat_blue_firebase/model/my_user.dart';
 import 'package:chat_blue_firebase/register/register_navigator.dart';
 import 'package:chat_blue_firebase/register/register_view_model.dart';
 import 'package:chat_blue_firebase/utilites/func.dart' as Utility;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/user_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   static String routeName = "RegisterScreen";
@@ -47,14 +50,17 @@ class _RegisterScreenState extends State<RegisterScreen>
           Container(
             color: Colors.white,
           ),
-          Container(
-            color: Colors.blue,
-            height: 70,
+          Image.asset(
+            "assets/main_background.png",
+            fit: BoxFit.fill,
+            width: double.infinity,
           ),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text("Register"),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              title: Text("Login"),
             ),
             body: Form(
               key: formKey,
@@ -181,7 +187,10 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   @override
-  void navigatorToHome() {
+  void navigatorToHome(MyUser user) {
+    var userProv = Provider.of<UserProvider>(context, listen: false);
+    userProv.user = user;
+
     Timer(Duration(milliseconds: 500), () {
       Navigator.of(context).pushNamed(HomeScreen.routeName);
     });

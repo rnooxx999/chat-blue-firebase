@@ -1,3 +1,5 @@
+import 'package:chat_blue_firebase/model/my_user.dart';
+
 abstract class LoginNovigator {
   void showLoading();
 
@@ -5,5 +7,5 @@ abstract class LoginNovigator {
 
   void showMessage(String message);
 
-  void navigatorToHome();
+  void navigatorToHome(MyUser user);
 }

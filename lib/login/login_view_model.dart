@@ -3,11 +3,14 @@ import 'package:chat_blue_firebase/firebase/firebase_errors.dart';
 import 'package:chat_blue_firebase/login/login_navigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
   late LoginNovigator loginNovigator;
 
   void loginFirebaseAuth(String email, String password) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     try {
       loginNovigator.showLoading();
       final result = await FirebaseAuth.instance
@@ -18,8 +21,10 @@ class LoginViewModel extends ChangeNotifier {
         loginNovigator.showMessage("Register Failed Please try again");
       } else {
         loginNovigator.hideLoading();
-        loginNovigator.showMessage("loading Succseefuly");
-        loginNovigator.navigatorToHome();
+        loginNovigator
+            .showMessage("loading Succseefuly : ${result.user!.uid} ");
+        sharedPreferences.setString("id", result.user!.uid);
+        loginNovigator.navigatorToHome(objLogin);
       }
 
       print("sign Id : ${result.user?.uid}");

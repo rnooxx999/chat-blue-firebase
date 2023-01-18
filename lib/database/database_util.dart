@@ -1,5 +1,13 @@
+import 'dart:ffi';
+
 import 'package:chat_blue_firebase/model/my_user.dart';
+import 'package:chat_blue_firebase/model/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../model/message.dart';
+
+//USER
+//اضافة كوليكشن اليوزر + تسجيل الدخول و التسجيل جديد
 
 class DataBaseUtil {
   static CollectionReference<MyUser> getUserCollection() {
@@ -18,5 +26,50 @@ class DataBaseUtil {
   static Future<MyUser?> loginUser(String userId) async {
     var document = await getUserCollection().doc(userId).get();
     return document.data();
+  }
+
+  //***************************************************************
+
+  //Room
+  // اضافة كوليكشن جديد للروم ثم وضعها في ستريم ليستقبل اي تحديث جديد لغرفة جديدة
+  static CollectionReference<RoomModel> getRoomCollection() {
+    return FirebaseFirestore.instance
+        .collection(RoomModel.collectionName)
+        .withConverter<RoomModel>(
+            fromFirestore: ((snapshot, options) =>
+                RoomModel.fromJson(snapshot.data()!)),
+            toFirestore: ((room, options) => room.toJson()));
+  }
+
+  static Future<void> addRoomFireBase(RoomModel room) async {
+    var document = await getRoomCollection().doc();
+    room.roomId = document.id;
+    return document.set(room);
+  }
+
+  static Stream<QuerySnapshot<RoomModel>> getRooms() {
+    return getRoomCollection().snapshots();
+  }
+
+  //***************************************************************
+
+//Message :
+// اضافة كولكشن المسج بداخل كوليكشن الروم حيث علينا جلب نسخة من الروم اولا ..
+  static CollectionReference<Message> getMessageCollection(String roomId) {
+    return FirebaseFirestore.instance
+        .collection(RoomModel.collectionName)
+        .doc(roomId)
+        .collection(Message.collectionName)
+        .withConverter(
+            fromFirestore: ((snapshot, option) =>
+                Message.fromJson(snapshot.data()!)),
+            toFirestore: (message, option) => message.toJson());
+  }
+
+  static Future<void> insertMessage(Message message) async {
+    var messageCollection = getMessageCollection(message.roomId);
+    var doc = messageCollection.doc();
+    message.id = doc.id;
+    return doc.set(message);
   }
 }

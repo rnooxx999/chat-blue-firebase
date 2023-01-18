@@ -1,7 +1,12 @@
+import 'package:chat_blue_firebase/add_room/add_room.dart';
+import 'package:chat_blue_firebase/chat/chat_screen.dart';
 import 'package:chat_blue_firebase/home/home_screen.dart';
+import 'package:chat_blue_firebase/provider/user_provider.dart';
 import 'package:chat_blue_firebase/register/register_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase/firebase_options.dart';
 import 'login/login_screen.dart';
@@ -12,8 +17,17 @@ void main() async {
     name: 'chat-blue-firebase',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: sharedPreferences.getString("id") != null
+          ? MyApp()
+          : MaterialApp(initialRoute: LoginScreen.routeName, routes: {
+              LoginScreen.routeName: (context) => LoginScreen(),
+              RegisterScreen.routeName: (context) => RegisterScreen(),
+              HomeScreen.routeName: (context) => HomeScreen(),
+            })));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,19 +35,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     return MaterialApp(
-      title: 'Todo List',
       // theme: MyThemeData.newsTheming,
 
       initialRoute:
-          //RegisterScreen.routeName,
-          LoginScreen.routeName,
+          //inititFirstPage(userProvider);
+          //  userProvider.initPage() ?
+          //userProvider==null ?
+          //  LoginScreen.routeName:
+          HomeScreen.routeName,
 
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
-        HomeScreen.routeName: (context) => HomeScreen()
+        HomeScreen.routeName: (context) => HomeScreen(),
+        AddRoom.routeName: (context) => AddRoom(),
+        ChatScreen.routeName: (context) => ChatScreen()
       },
     );
+  }
+
+  Future<String> inititFirstPage(user) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("id") == user) {
+      return HomeScreen.routeName;
+    }
+    return LoginScreen.routeName;
   }
 }
