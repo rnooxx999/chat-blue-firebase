@@ -60,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen>
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
-              title: Text("Login"),
+              title: Text("Register"),
             ),
             body: Form(
               key: formKey,
@@ -143,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         onPressed: () {
                           validationPasswordVailad();
                         },
-                        child: Text("HHHIIII"))
+                        child: Text("register"))
                   ],
                 ),
               ),

@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:chat_blue_firebase/add_room/add_room_navigator.dart';
 import 'package:chat_blue_firebase/add_room/add_room_view_model.dart';
 import 'package:chat_blue_firebase/model/category.dart';
-import 'package:chat_blue_firebase/provider/user_provider.dart';
+import 'package:chat_blue_firebase/utilites/func.dart' as Utility;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_blue_firebase/utilites/func.dart' as Utility;
-
 import 'package:provider/provider.dart';
 
 class AddRoom extends StatefulWidget {
@@ -76,7 +74,7 @@ class _AddRoomState extends State<AddRoom> implements AddRoomNavigator {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
-                      Image.asset("assets/car.jpg"),
+                      Image.asset("assets/group.png"),
                       SizedBox(
                         height: 15,
                       ),

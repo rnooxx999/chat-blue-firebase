@@ -24,7 +24,7 @@ class RoomWidget extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              "assets/car.jpg",
+              "assets/${room.categoryId}.png",
               fit: BoxFit.fill,
               width: 150,
             ),

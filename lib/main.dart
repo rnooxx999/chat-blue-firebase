@@ -20,14 +20,20 @@ void main() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: sharedPreferences.getString("id") != null
-          ? MyApp()
-          : MaterialApp(initialRoute: LoginScreen.routeName, routes: {
-              LoginScreen.routeName: (context) => LoginScreen(),
-              RegisterScreen.routeName: (context) => RegisterScreen(),
-              HomeScreen.routeName: (context) => HomeScreen(),
-            })));
+    create: (context) => UserProvider(),
+    child: MyApp(),
+
+    // child: sharedPreferences.getString("id") != null || UserProvider().user != null
+    //     ? MyApp()
+    //     : MaterialApp(initialRoute: LoginScreen.routeName, routes: {
+    //         LoginScreen.routeName: (context) => LoginScreen(),
+    //         RegisterScreen.routeName: (context) => RegisterScreen(),
+    //         HomeScreen.routeName: (context) => HomeScreen(),
+    //   AddRoom.routeName: (context) => AddRoom(),
+    //   ChatScreen.routeName: (context) => ChatScreen()
+    //
+    // })
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +41,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
     return MaterialApp(
       // theme: MyThemeData.newsTheming,
 
@@ -44,7 +49,7 @@ class MyApp extends StatelessWidget {
           //  userProvider.initPage() ?
           //userProvider==null ?
           //  LoginScreen.routeName:
-          HomeScreen.routeName,
+          LoginScreen.routeName,
 
       routes: {
         RegisterScreen.routeName: (context) => RegisterScreen(),
@@ -56,11 +61,4 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<String> inititFirstPage(user) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("id") == user) {
-      return HomeScreen.routeName;
-    }
-    return LoginScreen.routeName;
-  }
 }

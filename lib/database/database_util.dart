@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:chat_blue_firebase/model/my_user.dart';
 import 'package:chat_blue_firebase/model/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +13,7 @@ class DataBaseUtil {
         .collection(MyUser.collectionName)
         .withConverter<MyUser>(
             fromFirestore: ((snapshot, options) =>
-                MyUser.fromJson(snapshot.data())),
+                MyUser.fromJson(snapshot.data()!)),
             toFirestore: ((user, options) => user.toJson()));
   }
 
@@ -25,6 +23,7 @@ class DataBaseUtil {
 
   static Future<MyUser?> loginUser(String userId) async {
     var document = await getUserCollection().doc(userId).get();
+    //sharedPreferences.setString("name" , document.data()!.firstName);
     return document.data();
   }
 
@@ -60,10 +59,10 @@ class DataBaseUtil {
         .collection(RoomModel.collectionName)
         .doc(roomId)
         .collection(Message.collectionName)
-        .withConverter(
-            fromFirestore: ((snapshot, option) =>
+        .withConverter<Message>(
+            fromFirestore: ((snapshot, options) =>
                 Message.fromJson(snapshot.data()!)),
-            toFirestore: (message, option) => message.toJson());
+            toFirestore: (message, options) => message.toJson());
   }
 
   static Future<void> insertMessage(Message message) async {
@@ -71,5 +70,9 @@ class DataBaseUtil {
     var doc = messageCollection.doc();
     message.id = doc.id;
     return doc.set(message);
+  }
+
+  static Stream<QuerySnapshot<Message>> getMeessageFromFirebase(String roomId) {
+    return getMessageCollection(roomId).orderBy('date_time').snapshots();
   }
 }

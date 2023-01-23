@@ -1,36 +1,36 @@
 class MyUser {
   static const String collectionName = 'users';
-  String? id;
-  String? firstName;
-  String? lastName;
-  String? userName;
-  String? email;
+  String id;
+  String firstName;
+  String lastName;
+  String userName;
+  String email;
 
   MyUser({
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.userName,
-    this.email,
+    this.id = " ",
+    required this.firstName,
+    required this.lastName,
+    required this.userName,
+    required this.email,
   });
 
   //User.fromJson(Map<String , dynamic> json) :this{
 
-  MyUser.fromJson(dynamic json) {
-    id = json['id'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
-    userName = json['username'];
-    email = json['email'];
-  }
+  MyUser.fromJson(Map<String, dynamic> json)
+      : this(
+            id: json['id'] as String,
+            firstName: json['first_name'] as String,
+            lastName: json['last_name'] as String,
+            userName: json['username'] as String,
+            email: json['email'] as String);
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['first_name'] = firstName;
-    map['last_name'] = lastName;
-    map['username'] = userName;
-    map['email'] = email;
-    return map;
+    return {
+      'id': id,
+      'first_name': firstName,
+      'last_name': lastName,
+      'username': userName,
+      'email': email,
+    };
   }
 }

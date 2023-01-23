@@ -37,7 +37,7 @@ class RegisterViewModel extends ChangeNotifier {
       await DataBaseUtil.registerUser(user);
 
       novigator.hideLoading();
-      novigator.showMessage("Register Successful : ${credential.user!.uid}");
+      novigator.showMessage("Register Successful ");
       sharedPreferences.setString("id", credential.user!.uid);
 
       novigator.navigatorToHome(user);

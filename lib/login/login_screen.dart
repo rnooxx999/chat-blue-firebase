@@ -81,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNovigator {
                     },
                   ), //email
                   TextFormField(
+                    obscureText: true,
                     decoration: InputDecoration(labelText: "password"),
                     onChanged: (text) {
                       password = text;
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNovigator {
                       onPressed: () {
                         validationPasswordVailad();
                       },
-                      child: Text("HHHIIII")),
+                      child: Text("login")),
                   SizedBox(
                     height: 18,
                   ),

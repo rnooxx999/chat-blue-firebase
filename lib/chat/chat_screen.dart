@@ -1,11 +1,15 @@
 import 'package:chat_blue_firebase/chat/chat_navigator.dart';
 import 'package:chat_blue_firebase/chat/chat_view_model.dart';
+import 'package:chat_blue_firebase/model/message.dart';
 import 'package:chat_blue_firebase/model/room.dart';
 import 'package:chat_blue_firebase/provider/user_provider.dart';
+import 'package:chat_blue_firebase/utilites/func.dart' as Utility;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chat_blue_firebase/utilites/func.dart' as Utility;
+
+import 'message_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   static String routeName = "ChatSplashScreen";
@@ -22,14 +26,19 @@ class _ChatScreenState extends State<ChatScreen> implements ChatNavigator {
   @override
   void initState() {
     viewModel.navigator = this;
+
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)!.settings.arguments as RoomModel;
-    viewModel.room = args;
+    var args = ModalRoute.of(context)?.settings.arguments as RoomModel;
     var provider = Provider.of<UserProvider>(context);
+    viewModel.room = args;
     viewModel.currentUser = provider.user!;
+    viewModel.listenForUpdateMessage();
+
+    print("User : ${provider.user!.id}");
+    print("firstName : ${provider.user!.firstName}");
 
     return ChangeNotifierProvider(
         create: (context) => viewModel,
@@ -67,12 +76,41 @@ class _ChatScreenState extends State<ChatScreen> implements ChatNavigator {
                 ),
                 child: Column(
                   children: [
-                    Expanded(child: Container()),
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot<Message>>(
+                        stream: viewModel.streamMessage,
+                        builder: (context, asyncSnapShot) {
+                          if (asyncSnapShot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (asyncSnapShot.hasError) {
+                            return Text(asyncSnapShot.error.toString());
+                          } else {
+                            var messageList = asyncSnapShot.data?.docs
+                                    .map((doc) => doc.data())
+                                    .toList() ??
+                                [];
+                            return ListView.builder(
+                              itemBuilder: (context, index) {
+                                return MessageWidget(
+                                    message: messageList[index]);
+                              },
+                              itemCount: messageList.length,
+                            );
+                          }
+                        },
+                      ),
+                    ),
                     Row(
                       children: [
                         Expanded(
                           child: TextField(
                             controller: controller,
+                            onChanged: (text) {
+                              messageContent = text;
+                            },
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(5),
                                 hintText: "type a message",
@@ -87,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> implements ChatNavigator {
                         ),
                         ElevatedButton(
                             onPressed: () {
-                              viewModel.sendMessage(messageContent);
+                              viewModel.sendMessage(controller.text);
                             },
                             child: Row(
                               children: [

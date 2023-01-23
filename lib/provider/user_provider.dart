@@ -9,15 +9,6 @@ class UserProvider extends ChangeNotifier {
 
   User? userFirebase;
 
-  Future<bool> initPage() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(sharedPreferences.getString("id"));
-    if (sharedPreferences.getString("id") != null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   UserPrider() {
     userFirebase = FirebaseAuth.instance.currentUser;
@@ -26,8 +17,11 @@ class UserProvider extends ChangeNotifier {
   }
 
   initUser() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     if (userFirebase != null) {
       user = await DataBaseUtil.loginUser((userFirebase!.uid ?? ""));
+      await sharedPreferences.setString("name", user!.firstName);
     }
     notifyListeners();
   }
